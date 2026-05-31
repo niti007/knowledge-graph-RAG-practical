@@ -8,13 +8,20 @@ from dotenv import load_dotenv
 # Load .env from the same directory as this file
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
-NEO4J_URI      = os.getenv("NEO4J_URI",      "neo4j://127.0.0.1:7687")
-NEO4J_USER     = os.getenv("NEO4J_USER",     "lab1")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "eduhubspot")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+NEO4J_URI      = os.getenv("NEO4J_URI")
+NEO4J_USER     = os.getenv("NEO4J_USER")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Set key globally so LangChain sub-libraries pick it up automatically
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+if OPENAI_API_KEY:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
+if not NEO4J_URI or not NEO4J_USER or not NEO4J_PASSWORD:
+    raise EnvironmentError(
+        "Neo4j connection variables (NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD) "
+        "are not set. Add them to your .env file."
+    )
 
 if not OPENAI_API_KEY:
     raise EnvironmentError(
